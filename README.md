@@ -1,281 +1,126 @@
-# COMP5434 Dataset3 - 酒店预订取消预测
+# COMP5434 Dataset3 - Hotel Booking Cancellation Prediction
 
-## 📁 项目结构
+A machine learning project for predicting hotel booking cancellations, implemented **completely from scratch without sklearn**.
 
-> 💡 **提示**: 查看 [`项目完成报告.md`](./项目完成报告.md) 了解完整的项目交付情况
+## Project Overview
 
-```
-COMP5434/
-├── README.md                      # 项目主文档(本文件)
-├── 项目完成报告.md                # 📊 项目完成总结报告
-├── requirements.txt               # Python依赖
-├── .gitignore                     # Git配置
-├── Project.pdf                    # 原始项目要求
-│
-├── data/                          # 数据目录
-│   ├── train.csv                  # 训练数据(25,417条记录)
-│   └── test.csv                   # 测试数据(10,858条记录)
-│
-├── src/                           # 源代码目录
-│   ├── dataset3_solution.py       # 神经网络实现
-│   ├── dataset3_logistic.py       # 逻辑回归实现
-│   └── train_dataset3.py          # 主训练脚本⭐
-│
-├── output/                        # 输出目录
-│   ├── submission.csv             # 最佳模型预测结果⭐
-│   ├── submission_nn.csv          # 神经网络预测结果
-│   └── submission_lr.csv          # 逻辑回归预测结果
-│
-├── tests/                         # 测试目录
-│   ├── test_solution.py           # 算法验证测试
-│   └── run_quick_test.sh          # 快速测试脚本
-│
-└── docs/                          # 文档目录
-    ├── 快速开始.md                # 快速上手指南
-    ├── 文件结构说明.md            # 文件组织说明
-    ├── 项目总览.md                # 项目全貌说明
-    ├── README_Dataset3.md         # 详细使用文档
-    ├── 产品文档.md                # 产品需求文档
-    ├── 设计需求.md                # 技术设计文档
-    └── 执行计划.md                # 开发执行计划
-```
+This project implements two classification algorithms to predict whether a hotel booking will be canceled:
+- **Neural Network (MLP)**: 83% validation accuracy
+- **Logistic Regression**: 80% validation accuracy
 
-## 📚 文档导航
+**Key Constraint**: All algorithms implemented using only NumPy and Pandas, no scikit-learn allowed.
 
-| 文档 | 说明 | 适合人群 |
-|------|------|---------|
-| [README.md](./README.md) | 项目主文档 | **所有人** |
-| [项目完成报告.md](./项目完成报告.md) | 📊 完整交付报告 | **查看项目成果** |
-| [docs/快速开始.md](./docs/快速开始.md) | 三步上手 | **赶时间的用户** |
-| [docs/文件结构说明.md](./docs/文件结构说明.md) | 文件组织 | **了解项目结构** |
-| [docs/README_Dataset3.md](./docs/README_Dataset3.md) | 详细文档 | **需要调优** |
-```
+## Dataset
 
-## 🎯 项目概述
+- **Training Set**: 25,417 records with 17 features
+- **Test Set**: 10,858 records
+- **Task**: Binary classification (0 = Not Canceled, 1 = Canceled)
+- **Features**: Numerical (e.g., adults, children, lead time) and categorical (meal plan, room type, market segment)
 
-这是COMP5434课程的Dataset3项目，任务是**预测酒店预订是否会被取消**。
+## Quick Start
 
-**关键要求**: ✅ 完全不使用sklearn
+### Installation
 
-### 数据集信息
-- **训练集**: 25,417条记录，17个特征
-- **测试集**: 10,858条记录
-- **任务类型**: 二分类(0=不取消, 1=取消)
-- **类别分布**: 
-  - Class 0 (不取消): 17,034条 (67.0%)
-  - Class 1 (取消): 8,383条 (33.0%)
-
-### 特征说明
-- **数值特征**: 成人数量、儿童数量、周末晚数、工作日晚数、提前预订天数、历史取消次数等
-- **类别特征**: 餐饮计划类型、房间类型、市场细分类型(已自动编码)
-
-## 🚀 快速开始
-
-### 1. 环境准备
 ```bash
-# 安装依赖
 pip install -r requirements.txt
 ```
 
-### 2. 运行训练
+### Training
+
 ```bash
-# 运行主训练脚本(自动训练两种模型并选择最佳)
-python3 src/train_dataset3.py
+python src/train_dataset3.py
 ```
 
-### 3. 获取结果
-训练完成后，在`output/`目录下会生成:
-- `submission.csv` - 最佳模型的预测结果(可直接提交Kaggle)
-- `submission_nn.csv` - 神经网络预测结果
-- `submission_lr.csv` - 逻辑回归预测结果
+The script will:
+1. Load and preprocess the data
+2. Train both neural network and logistic regression models
+3. Evaluate on validation set
+4. Generate predictions in `output/submission.csv`
 
-## 📊 模型性能
+### Output
 
-基于实际数据训练的结果:
+- `output/submission.csv` - Best model predictions (ready for Kaggle submission)
+- `output/submission_nn.csv` - Neural network predictions
+- `output/submission_lr.csv` - Logistic regression predictions
 
-| 模型 | 训练准确率 | 验证准确率 | 说明 |
-|------|-----------|-----------|------|
-| 神经网络 | ~85% | ~83% | 3层隐藏层[64,32,16] |
-| 逻辑回归 | ~81% | ~80% | L2正则化 |
+## Model Architecture
 
-*注: 实际性能可能因随机种子而略有差异*
+### Neural Network
 
-## 🔧 技术实现
+- **Architecture**: Multi-layer perceptron with 3 hidden layers [64, 32, 16]
+- **Activation**: ReLU (hidden) + Softmax (output)
+- **Loss**: Cross-entropy
+- **Optimizer**: Mini-batch gradient descent
+- **Weight Initialization**: He initialization
 
-### 核心算法(完全不使用sklearn)
+### Logistic Regression
 
-#### 1. 神经网络 (`dataset3_solution.py`)
-- **架构**: 多层感知机(MLP)
-- **隐藏层**: [64, 32, 16]
-- **激活函数**: ReLU (隐藏层) + Softmax (输出层)
-- **损失函数**: 交叉熵
-- **优化器**: Mini-batch梯度下降
-- **权重初始化**: He初始化
+- **Model**: Softmax regression
+- **Regularization**: L2 penalty
+- **Optimizer**: Batch gradient descent
 
-#### 2. 逻辑回归 (`dataset3_logistic.py`)
-- **模型**: Softmax回归(多分类)
-- **正则化**: L2正则化
-- **优化器**: 批量梯度下降
+## Implementation Details
 
-### 数据预处理
-1. **类别特征编码**: Label Encoding(type_of_meal_plan, room_type_reserved, market_segment_type)
-2. **特征标准化**: Z-score标准化
-3. **标签编码**: One-hot编码
-4. **数据划分**: 80%训练, 20%验证
+All core algorithms are implemented from scratch in NumPy:
 
-## ⚙️ 配置调整
+- Forward and backward propagation
+- Gradient descent optimization
+- Cross-entropy loss computation
+- Data preprocessing (standardization, encoding)
+- Train/validation split
 
-编辑`src/train_dataset3.py`中的CONFIG字典:
+**No sklearn components used.**
+
+## Project Structure
+
+```
+├── src/
+│   ├── train_dataset3.py          # Main training script
+│   ├── dataset3_solution.py       # Neural network implementation
+│   └── dataset3_logistic.py       # Logistic regression implementation
+├── data/
+│   ├── train.csv                  # Training data
+│   └── test.csv                   # Test data
+├── output/
+│   └── submission.csv             # Predictions for submission
+├── tests/
+│   └── test_solution.py           # Algorithm validation
+└── docs/                          # Additional documentation
+```
+
+## Performance
+
+| Model | Training Accuracy | Validation Accuracy |
+|-------|------------------|---------------------|
+| Neural Network | 85.3% | 83.1% |
+| Logistic Regression | 81.5% | 80.2% |
+
+## Configuration
+
+Edit `CONFIG` in `src/train_dataset3.py` to adjust hyperparameters:
 
 ```python
 CONFIG = {
-    # 神经网络配置
-    'hidden_layers': [64, 32, 16],     # 网络结构
-    'learning_rate': 0.01,              # 学习率
-    'epochs': 150,                      # 训练轮数
-    'batch_size': 64,                   # 批次大小
-    
-    # 逻辑回归配置
-    'lr_learning_rate': 0.1,            # 学习率
-    'l2_lambda': 0.01,                  # L2正则化
-    'lr_epochs': 800,                   # 训练轮数
-    'lr_batch_size': 128,               # 批次大小
-    
-    # 其他
-    'validation_split': 0.2,            # 验证集比例
-    'train_both': True                  # 是否训练两种模型
+    'hidden_layers': [64, 32, 16],
+    'learning_rate': 0.01,
+    'epochs': 150,
+    'batch_size': 64,
+    'validation_split': 0.2
 }
 ```
 
-## 🧪 测试验证
+## Testing
 
 ```bash
-# 运行算法验证测试
-python3 tests/test_solution.py
-
-# 或使用快速测试脚本
-cd tests && ./run_quick_test.sh
+python tests/test_solution.py
 ```
 
-## 📈 训练输出示例
+## Requirements
 
-```
-============================================================
-Loading Hotel Booking Cancellation Dataset
-============================================================
-Train data shape: (25417, 19)
-Test data shape: (10858, 18)
+- Python 3.x
+- NumPy
+- Pandas
 
-Categorical features: ['type_of_meal_plan', 'room_type_reserved', 'market_segment_type']
+## License
 
-After encoding:
-  Features: 17
-  Training samples: 25417
-  Test samples: 10858
-
-============================================================
-Training Neural Network Model
-============================================================
-Architecture: [17, 64, 32, 16, 2]
-Epoch 10/150 - Loss: 0.4521, Accuracy: 0.7856, Val Loss: 0.4498, Val Accuracy: 0.7912
-...
-
-Neural Network Results:
-  Training Accuracy: 0.8534
-  Validation Accuracy: 0.8312
-
-============================================================
-Training Logistic Regression Model
-============================================================
-Epoch 50/800 - Loss: 0.4234, Accuracy: 0.8012, Val Loss: 0.4356, Val Accuracy: 0.7956
-...
-
-Logistic Regression Results:
-  Training Accuracy: 0.8145
-  Validation Accuracy: 0.8023
-
-============================================================
-Model Comparison
-============================================================
-Model                     Train Acc    Val Acc     
-------------------------------------------------------------
-Neural Network            0.8534       0.8312
-Logistic Regression       0.8145       0.8023
-
-Best Model: Neural Network
-```
-
-## 🎓 学习要点
-
-1. ✅ **从零实现机器学习算法**
-   - 神经网络的前向和反向传播
-   - 梯度下降优化
-   - 损失函数计算
-
-2. ✅ **数据预处理技术**
-   - 类别特征编码
-   - 特征标准化
-   - 数据集划分
-
-3. ✅ **模型评估与选择**
-   - 训练/验证集评估
-   - 多模型对比
-   - 自动选择最佳模型
-
-## 📝 常见问题
-
-**Q: 如何提高模型准确率?**
-```
-A: 1. 增加网络层数或神经元数量: hidden_layers = [128, 64, 32]
-   2. 增加训练轮数: epochs = 200
-   3. 调整学习率: learning_rate = 0.005
-   4. 尝试不同的特征工程方法
-```
-
-**Q: 训练时间太长?**
-```
-A: 1. 减少训练轮数: epochs = 100
-   2. 设置 train_both = False 只训练神经网络
-   3. 增大批次大小: batch_size = 128
-```
-
-**Q: 出现nan或inf?**
-```
-A: 学习率过大，降低学习率: learning_rate = 0.001
-```
-
-## 📦 提交说明
-
-1. **Kaggle提交文件**: `output/submission.csv`
-2. **文件格式**: 
-   ```csv
-   id,label
-   300001,0
-   300002,0
-   ...
-   ```
-3. **预测数量**: 10,858条
-4. **标签范围**: 0或1
-
-## 🏆 项目亮点
-
-- ✅ **完全手工实现**: 不使用任何sklearn功能
-- ✅ **双模型方案**: 神经网络 + 逻辑回归
-- ✅ **自动化流程**: 一键训练、评估、输出
-- ✅ **完整文档**: 详细的代码注释和使用文档
-- ✅ **规范结构**: 清晰的目录组织
-- ✅ **高质量代码**: 模块化设计，易于维护
-
-## 📧 项目信息
-
-- **课程**: COMP5434
-- **任务**: Dataset3 - 酒店预订取消预测
-- **要求**: 不使用sklearn
-- **状态**: ✅ 已完成训练和测试
-- **最后更新**: 2025-11-06
-
----
-
-**祝您取得好成绩! 🎉**
-
-查看 `docs/快速开始.md` 获取更简洁的使用指南。
+Academic project for COMP5434.
