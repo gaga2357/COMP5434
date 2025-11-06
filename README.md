@@ -11,12 +11,14 @@ pip install -r requirements.txt
 
 ### 运行训练
 
-**终极优化版**（验证准确率 88%+，强烈推荐）⭐：
+**极限优化版**（验证准确率 88%+，强烈推荐）🔥：
+```bash
+python src/train_extreme.py
+```
+
+**终极优化版**（验证准确率 86%）：
 ```bash
 python src/train_ultra.py
-# 或后台运行
-./run_ultra.sh
-tail -f training_ultra.log
 ```
 
 **增强版本**（验证准确率 86%）：
@@ -108,8 +110,8 @@ python src/train_dataset3.py
 │   └── test.csv                # 测试数据
 ├── output/
 │   └── submission*.csv         # 预测结果
-└── tests/
-    └── test_solution.py        # 算法验证
+├── OPTIMIZATION.md             # 优化过程详解
+└── README.md                   # 项目说明
 ```
 
 ---
@@ -144,6 +146,12 @@ python src/train_dataset3.py
 - Python 3.x
 - NumPy - 数值计算
 - Pandas - 数据处理
+
+---
+
+## 优化详解 📖
+
+详细的优化过程和技术细节请查看：[OPTIMIZATION.md](./OPTIMIZATION.md)
 
 ---
 
