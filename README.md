@@ -1,126 +1,128 @@
-# COMP5434 Dataset3 - Hotel Booking Cancellation Prediction
+# COMP5434 Dataset3 - 酒店预订取消预测 🏨
 
-A machine learning project for predicting hotel booking cancellations, implemented **completely from scratch without sklearn**.
+基于神经网络和逻辑回归的酒店预订取消预测系统，**完全不使用 sklearn 实现**。
 
-## Project Overview
+## 项目简介 📋
 
-This project implements two classification algorithms to predict whether a hotel booking will be canceled:
-- **Neural Network (MLP)**: 83% validation accuracy
-- **Logistic Regression**: 80% validation accuracy
+本项目实现了两种机器学习算法来预测酒店预订是否会被取消：
+- 🧠 **神经网络**: 验证准确率 83%
+- 📊 **逻辑回归**: 验证准确率 80%
 
-**Key Constraint**: All algorithms implemented using only NumPy and Pandas, no scikit-learn allowed.
+核心要求：所有算法基于 NumPy 从零实现，不使用 scikit-learn。
 
-## Dataset
+## 数据集说明 📊
 
-- **Training Set**: 25,417 records with 17 features
-- **Test Set**: 10,858 records
-- **Task**: Binary classification (0 = Not Canceled, 1 = Canceled)
-- **Features**: Numerical (e.g., adults, children, lead time) and categorical (meal plan, room type, market segment)
+- 训练集：25,417 条记录，17 个特征
+- 测试集：10,858 条记录
+- 任务类型：二分类（0=不取消，1=取消）
+- 特征类型：数值型（成人数、儿童数、提前天数等）+ 类别型（餐饮类型、房间类型、市场细分）
 
-## Quick Start
+## 快速开始 🚀
 
-### Installation
+### 安装依赖
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Training
+### 运行训练
 
 ```bash
 python src/train_dataset3.py
 ```
 
-The script will:
-1. Load and preprocess the data
-2. Train both neural network and logistic regression models
-3. Evaluate on validation set
-4. Generate predictions in `output/submission.csv`
+程序会自动完成以下流程：
+1. 加载并预处理数据
+2. 训练神经网络和逻辑回归模型
+3. 在验证集上评估性能
+4. 生成预测结果文件
 
-### Output
+### 输出文件
 
-- `output/submission.csv` - Best model predictions (ready for Kaggle submission)
-- `output/submission_nn.csv` - Neural network predictions
-- `output/submission_lr.csv` - Logistic regression predictions
+训练完成后，在 `output/` 目录下会生成：
+- `submission.csv` - 最佳模型的预测结果（可直接提交）
+- `submission_nn.csv` - 神经网络预测
+- `submission_lr.csv` - 逻辑回归预测
 
-## Model Architecture
+## 模型架构 🏗️
 
-### Neural Network
+### 神经网络 (MLP)
 
-- **Architecture**: Multi-layer perceptron with 3 hidden layers [64, 32, 16]
-- **Activation**: ReLU (hidden) + Softmax (output)
-- **Loss**: Cross-entropy
-- **Optimizer**: Mini-batch gradient descent
-- **Weight Initialization**: He initialization
+- 网络结构：3 层隐藏层 [64, 32, 16]
+- 激活函数：ReLU（隐藏层）+ Softmax（输出层）
+- 损失函数：交叉熵
+- 优化方法：Mini-batch 梯度下降
+- 权重初始化：He 初始化
 
-### Logistic Regression
+### 逻辑回归 (Softmax)
 
-- **Model**: Softmax regression
-- **Regularization**: L2 penalty
-- **Optimizer**: Batch gradient descent
+- 模型类型：Softmax 多分类回归
+- 正则化：L2 惩罚项
+- 优化方法：批量梯度下降
 
-## Implementation Details
+## 实现细节 ⚙️
 
-All core algorithms are implemented from scratch in NumPy:
+所有核心算法均使用 NumPy 手工实现：
 
-- Forward and backward propagation
-- Gradient descent optimization
-- Cross-entropy loss computation
-- Data preprocessing (standardization, encoding)
-- Train/validation split
+- ✅ 前向传播与反向传播
+- ✅ 梯度下降优化
+- ✅ 交叉熵损失计算
+- ✅ 数据预处理（标准化、编码）
+- ✅ 训练/验证集划分
 
-**No sklearn components used.**
+**完全不依赖 sklearn。**
 
-## Project Structure
+## 项目结构 📁
 
 ```
 ├── src/
-│   ├── train_dataset3.py          # Main training script
-│   ├── dataset3_solution.py       # Neural network implementation
-│   └── dataset3_logistic.py       # Logistic regression implementation
+│   ├── train_dataset3.py          # 主训练脚本
+│   ├── dataset3_solution.py       # 神经网络实现
+│   └── dataset3_logistic.py       # 逻辑回归实现
 ├── data/
-│   ├── train.csv                  # Training data
-│   └── test.csv                   # Test data
+│   ├── train.csv                  # 训练数据
+│   └── test.csv                   # 测试数据
 ├── output/
-│   └── submission.csv             # Predictions for submission
+│   └── submission.csv             # 预测结果
 ├── tests/
-│   └── test_solution.py           # Algorithm validation
-└── docs/                          # Additional documentation
+│   └── test_solution.py           # 算法验证
+└── docs/                          # 详细文档
 ```
 
-## Performance
+## 性能表现 📈
 
-| Model | Training Accuracy | Validation Accuracy |
-|-------|------------------|---------------------|
-| Neural Network | 85.3% | 83.1% |
-| Logistic Regression | 81.5% | 80.2% |
+| 模型 | 训练准确率 | 验证准确率 |
+|------|----------|----------|
+| 神经网络 | 85.3% | 83.1% |
+| 逻辑回归 | 81.5% | 80.2% |
 
-## Configuration
+## 参数配置 🔧
 
-Edit `CONFIG` in `src/train_dataset3.py` to adjust hyperparameters:
+可以在 `src/train_dataset3.py` 中调整超参数：
 
 ```python
 CONFIG = {
-    'hidden_layers': [64, 32, 16],
-    'learning_rate': 0.01,
-    'epochs': 150,
-    'batch_size': 64,
-    'validation_split': 0.2
+    'hidden_layers': [64, 32, 16],    # 网络层数
+    'learning_rate': 0.01,             # 学习率
+    'epochs': 150,                     # 训练轮数
+    'batch_size': 64,                  # 批次大小
+    'validation_split': 0.2            # 验证集比例
 }
 ```
 
-## Testing
+## 测试验证 🧪
 
 ```bash
 python tests/test_solution.py
 ```
 
-## Requirements
+## 技术栈 💻
 
 - Python 3.x
-- NumPy
-- Pandas
+- NumPy - 数值计算
+- Pandas - 数据处理
 
-## License
+---
 
-Academic project for COMP5434.
+**课程项目**: COMP5434  
+**完成时间**: 2025-11-06
